@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Navbar, Container, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Navbar, Container, Nav, Form, FormControl, Button, Badge, NavDropdown } from 'react-bootstrap';
+import { UserContext } from './UserContext';
 
-function Header({ cartItemCount }) {
+function Header({ defaultSearchTerm = '' }) {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('query') || '');
+  const { user, logout, cart } = useContext(UserContext);
+  
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get('query') || '');
+  }, [location]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -12,10 +21,13 @@ function Header({ cartItemCount }) {
     setSearchTerm('');
   };
 
+  const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
+
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="py-3">
       <Container fluid>
-        <Navbar.Brand onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
+        <Navbar.Brand onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
           E-Commerce Site
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -32,13 +44,19 @@ function Header({ cartItemCount }) {
             <Button variant="outline-success" type="submit">Search</Button>
           </Form>
           <Nav className="ms-auto">
-            <Button variant="outline-info" onClick={() => navigate('/cart')}>
+            {user ? (
+              <NavDropdown title={`Hello, ${user.username}`} id="basic-nav-dropdown">
+                <NavDropdown.Item onClick={() => navigate('/profile')}>Profile</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => logout()}>Logout</NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <Button variant="outline-info" onClick={() => navigate('/login')}>Login</Button>
+            )}
+            <Button variant="outline-info" className="ms-2" onClick={() => navigate('/cart')}>
               <i className="fas fa-shopping-cart"></i>
               <span> Cart </span>
               {cartItemCount > 0 && (
-                <Badge pill bg="success">
-                  {cartItemCount}
-                </Badge>
+                <Badge pill bg="success">{cartItemCount}</Badge>
               )}
             </Button>
           </Nav>
