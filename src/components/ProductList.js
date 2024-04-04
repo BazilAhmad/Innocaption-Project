@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
 import Filter from './Filter';
 import StarRatings from 'react-star-ratings';
+import { FaHeart, FaCheck } from 'react-icons/fa'; // Using react-icons for icons
+import { UserContext } from './UserContext';
+
+
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const [category, setCategory] = useState('');
+  const { toggleWishlistItem, isItemInWishlist, user } = useContext(UserContext);
+
 
 
   useEffect(() => {
@@ -52,6 +58,18 @@ function ProductList() {
               <Col md={12}>
                 <Link to={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <Card className="mb-3" style={{ width: '100%' }}>
+                    {user && (
+                      <div
+                        style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation(); // Prevent card click event
+                          toggleWishlistItem(product);
+                        }}
+                      >
+                        {isItemInWishlist(product.id) ? <FaCheck /> : <FaHeart />}
+                      </div>
+                    )}
                     <Row noGutters>
                       <Col md={4}>
                         <Card.Img src={product.thumbnail} style={{ width: '100%', height: 'auto' }} />
@@ -61,18 +79,18 @@ function ProductList() {
                           <Card.Title>{product.title}</Card.Title>
                           <Card.Text>{product.description}</Card.Text>
                           <Card.Text>${product.price}</Card.Text>
-                          <StarRatings rating={product.rating} 
-                          starRatedColor="gold"
-                          numberOfStars={5}
-                          name='rating'
-                          starDimension="15px"
-                          starSpacing="1px"
+                          <StarRatings rating={product.rating}
+                            starRatedColor="gold"
+                            numberOfStars={5}
+                            name='rating'
+                            starDimension="15px"
+                            starSpacing="1px"
                           />
-                         {/*<div className="mt-3"> 
+                          {/*<div className="mt-3"> 
                             <Button variant="primary" onClick={() => addToCart(product)}>
                               Add to Cart
                               </Button>
-                              </div> */} 
+                              </div> */}
                         </Card.Body>
                       </Col>
                     </Row>

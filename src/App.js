@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Profile from './components/Profile';
+import SignUp from './components/SignUp';
 import { UserProvider } from './components/UserContext';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/search" element={<SearchResults />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />

@@ -9,7 +9,7 @@ function Header({ defaultSearchTerm = '' }) {
   const searchParams = new URLSearchParams(location.search);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('query') || '');
   const { user, logout, cart } = useContext(UserContext);
-  
+
 
   useEffect(() => {
     setSearchTerm(searchParams.get('query') || '');

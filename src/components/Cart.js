@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, ListGroup, ListGroupItem, Button, FormControl, Row, Col, Badge } from 'react-bootstrap';
 import { UserContext } from './UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function Cart() {
   const { cart, removeFromCart, updateQuantity, checkout, checkedOut, resetCheckout } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     resetCheckout(); // Ensure to define or handle resetCheckout inside UserContext if needed
@@ -14,7 +16,7 @@ function Cart() {
     const itemTotal = (item.quantity || 0) * (item.price || 0);
     return total + itemTotal;
   }, 0);
-  
+
   return (
     <Container className="mt-4">
       <h2 className="mb-4">Cart Items</h2>
@@ -23,7 +25,7 @@ function Cart() {
         {cart.length > 0 ? (
           cart.map(item => (
             <ListGroupItem key={item.id} className="d-flex justify-content-between align-items-center">
-              <div className="me-auto">
+              <div className="me-auto" style={{ cursor: 'pointer' }} onClick={() => navigate(`/products/${item.id}`)}>
                 <Badge bg="info" className="me-3">{item.quantity}x</Badge>
                 {item.title}
               </div>
@@ -34,7 +36,7 @@ function Cart() {
                 style={{ width: '80px', marginRight: '10px' }}
               />
               <span className="me-2">${(item.quantity * item.price).toFixed(2)}</span>
-              <Button variant="outline-danger" size="sm" onClick={() => removeFromCart(item.id)}>
+              <Button variant="outline-danger" size="sm" onClick={(e) => { e.stopPropagation(); removeFromCart(item.id); }}>
                 Remove
               </Button>
             </ListGroupItem>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Container, ListGroup, Row, Col, Card, Button} from 'react-bootstrap';
+import { Container, ListGroup, Row, Col, Card, Button } from 'react-bootstrap';
 import Filter from './Filter'; // Ensure this path is correct
 import StarRatings from 'react-star-ratings';
 import { UserContext } from './UserContext';
+import { FaHeart, FaCheck } from 'react-icons/fa'; // Using react-icons for icons
+
 
 function SearchResults() {
   const [searchParams] = useSearchParams();
@@ -13,7 +15,9 @@ function SearchResults() {
   const [sortBy, setSortBy] = useState('');
   const [category, setCategory] = useState('');
   const { addToCart } = useContext(UserContext);
-  const navigate=useNavigate();
+  const { toggleWishlistItem, isItemInWishlist, user } = useContext(UserContext);
+
+  const navigate = useNavigate();
   const handleCardClick = (productId) => {
     navigate(`/products/${productId}`); // This will navigate to the product detail page
   };
@@ -23,7 +27,7 @@ function SearchResults() {
       try {
         const response = await axios.get('https://dummyjson.com/products');
         let products = response.data.products;
-  
+
         // Filter products based on searchTerm matching with title, description, category, or brand
         if (searchTerm) {
           products = products.filter(product =>
@@ -33,12 +37,12 @@ function SearchResults() {
             product.brand.toLowerCase().includes(searchTerm.toLowerCase())
           );
         }
-  
+
         // Further filtering and sorting as per category and sortBy
         if (category) {
           products = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
         }
-  
+
         switch (sortBy) {
           case 'priceAsc':
             products.sort((a, b) => a.price - b.price);
@@ -51,13 +55,13 @@ function SearchResults() {
             break;
           // Additional sorting options can be added here
         }
-  
+
         setProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-  
+
     fetchProducts();
   }, [searchTerm, sortBy, category]);
 
@@ -73,6 +77,18 @@ function SearchResults() {
                 <Card className="mb-3" style={{ width: '100%', cursor: 'pointer' }}
                   onClick={() => handleCardClick(product.id)}
                 >
+                  {user && (
+                    <div
+                      style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation(); // Prevent card click event
+                        toggleWishlistItem(product);
+                      }}
+                    >
+                      {isItemInWishlist(product.id) ? <FaCheck /> : <FaHeart />}
+                    </div>
+                  )}
                   <Row noGutters>
                     <Col md={4}>
                       <Card.Img src={product.thumbnail} style={{ width: '100%', height: 'auto' }} />

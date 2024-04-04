@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [username, setUsername] = useState('');
   const { setUser } = useContext(UserContext);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { login } = useContext(UserContext);
 
 
@@ -14,6 +14,11 @@ const Login = () => {
     e.preventDefault();
     login(username); // Now login handles everything internally
     navigate('/'); // Navigate to home or desired page after login
+  };
+
+  const handleSignUp = () => {
+    // Navigate to the sign-up page
+    navigate('/signup'); // Adjust the route as per your sign-up page's route
   };
 
   return (
@@ -31,10 +36,13 @@ const Login = () => {
           />
         </Form.Group>
         <div className='mt-3'>
-        <Button type="submit" variant="primary">Login</Button>
+          <Button type="submit" variant="primary">Login</Button>
+        </div>
+        <div className='mt-3'>
+          <Button onClick={handleSignUp} variant="secondary">Not a user? Sign Up!</Button>
         </div>
       </Form>
-      
+
     </Container>
   );
 };
