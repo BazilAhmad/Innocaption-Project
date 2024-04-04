@@ -103,7 +103,7 @@ function ProductDetail() {
                 starSpacing="2px"
               />
               <div style={{ marginTop: '10px' }}>
-                {user && (
+                { (
                   <>
                     <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
                     <Button variant="link" onClick={() => toggleWishlistItem(product)} style={{ marginRight: '5px', border: 'none', background: 'transparent' }}>
