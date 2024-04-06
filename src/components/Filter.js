@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
 function Filter({ setSortBy, setCategory, currentSearchTerm }) {
-  // Display the current search term, if needed
   console.log('Current Search Term:', currentSearchTerm);
 
   return (
@@ -24,7 +23,6 @@ function Filter({ setSortBy, setCategory, currentSearchTerm }) {
           <option value="skincare">Skincare</option>
           <option value="groceries">Groceries</option>
           <option value="home-decoration">Home Decoration</option>
-          {/* Add more categories as needed */}
         </Form.Select>
       </Col>
     </Row>

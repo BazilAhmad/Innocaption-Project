@@ -62,9 +62,7 @@ function ProductDetail() {
     setReviewText(''); // Clear review text after submission
   };
 
-  const initiateReviewEditing = () => {
-    setEditingReview(true);
-  };
+
 
   const handleDeleteReview = (reviewProductId) => {
     deleteUserReview(reviewProductId);
@@ -79,7 +77,6 @@ function ProductDetail() {
 
 
   const hasPurchased = user && hasPurchasedItem(productId);
-  const currentReview = findReviewForProduct(productId);
 
   console.log('all reviews:', allReviews)
   return (
@@ -107,7 +104,11 @@ function ProductDetail() {
                   <>
                     <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
                     <Button variant="link" onClick={() => toggleWishlistItem(product)} style={{ marginRight: '5px', border: 'none', background: 'transparent' }}>
-                      {isItemInWishlist(product.id) ? <FaCheck className="wishlist-icon" /> : <FaHeart className="wishlist-icon" />}
+                    {user && (
+                      <div>
+                        {isItemInWishlist(product.id) ? <FaCheck /> : <FaHeart />}
+                      </div>
+                    )}
                     </Button>
                   </>
                 )}

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Container, ListGroup, Row, Col, Card, Button } from 'react-bootstrap';
-import Filter from './Filter'; // Ensure this path is correct
+import Filter from './Filter'; 
 import StarRatings from 'react-star-ratings';
 import { UserContext } from './UserContext';
-import { FaHeart, FaCheck } from 'react-icons/fa'; // Using react-icons for icons
+import { FaHeart, FaCheck } from 'react-icons/fa'; 
 
 
 function SearchResults() {

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
 
@@ -89,12 +90,12 @@ export const UserProvider = ({ children }) => {
   const login = (username) => {
     if (!username.trim()) {
       alert('Username cannot be empty');
-      return; // Stop the login process
+      return false; // Stop the login process
     }
     const storedUsernames = JSON.parse(localStorage.getItem('users') || '[]');
     if (!storedUsernames.includes(username)) {
       alert('This username does not exist. Please sign up.');
-      return; // Stop the login process if the username is not found
+      return false; // Stop the login process if the username is not found
     }
 
     // Load the user's cart if it exists or create an empty one
@@ -148,6 +149,7 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('currentUser', JSON.stringify({ username }));
     localStorage.setItem(`cart_${username}`, JSON.stringify(finalCart));
     localStorage.removeItem('cart_nonUser'); // Clear non-user cart regardless of the merge
+    return true;
   };
 
     // Function to handle user sign-up
@@ -155,21 +157,22 @@ export const UserProvider = ({ children }) => {
       // Check for empty username
       if (!username) {
         alert("Username cannot be empty.");
-        return;
+        return false;
       }
       // Check if username is already taken
       const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
       const isUsernameTaken = storedUsers.includes(username);
       if (isUsernameTaken) {
         alert("Username is already taken. Choose a different one.");
-        return;
+        return false;
       }
       // Save new username
       storedUsers.push(username);
       localStorage.setItem('users', JSON.stringify(storedUsers));
       // Set the user state
       setUser({ username });
-      // Additional sign-up logic (if any)
+      login(username); // Invoke login
+      return true;
     };
   
     // Context provider value
@@ -177,7 +180,7 @@ export const UserProvider = ({ children }) => {
       user,
       login,
       signUp,
-      // other context properties
+   
     };
 
 
@@ -189,7 +192,6 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('currentUser');
     setUser(null);
     setCart([]);
-    // Optionally clear non-user cart as well
     localStorage.removeItem('cart_nonUser');
   };
 
@@ -235,7 +237,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const addReview = (productId, reviewText, reviewer) => {
-    // Ensure productId is treated as a number for strict equality comparison
     const numericProductId = Number(productId);
 
     // Update orders with the review, including the reviewer's username
@@ -243,7 +244,7 @@ export const UserProvider = ({ children }) => {
       ...order,
       items: order.items.map(item =>
         item.id === numericProductId ?
-          { ...item, review: { text: reviewText, reviewer } } : // Include reviewer information
+          { ...item, review: { text: reviewText, reviewer } } : 
           item
       ),
     }));
@@ -263,18 +264,16 @@ export const UserProvider = ({ children }) => {
 
 
   const deleteUserReview = (productId) => {
-    // Assuming `globalReviews` is stored in localStorage
     const globalReviews = JSON.parse(localStorage.getItem('globalReviews')) || [];
     const updatedReviews = globalReviews.filter(review => !(review.productId === productId && review.reviewer === user.username));
     localStorage.setItem('globalReviews', JSON.stringify(updatedReviews));
 
-    // Optionally, update the user's orders to remove the review from there as well
     const updatedOrders = orders.map(order => ({
       ...order,
       items: order.items.map(item => {
         if (item.id === productId) {
           const newItem = { ...item };
-          delete newItem.review; // Remove review from the item
+          delete newItem.review; 
           return newItem;
         }
         return item;

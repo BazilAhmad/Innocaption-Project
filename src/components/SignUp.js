@@ -10,9 +10,12 @@ const SignUp = () => {
   
   const handleSignUp = (e) => {
     e.preventDefault();
-    signUp(username);
-    login(username); // Invoke login
-    navigate('/'); // Redirect the user to the homepage or login page
+    const taken = signUp(username);
+    if (!taken) {
+        navigate('/signup')
+    } else {
+    navigate('/')
+    }
   };
 
   return (

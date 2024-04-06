@@ -8,7 +8,7 @@ function Cart() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    resetCheckout(); // Ensure to define or handle resetCheckout inside UserContext if needed
+    resetCheckout(); 
   }, [resetCheckout]);
 
   // Compute the total price

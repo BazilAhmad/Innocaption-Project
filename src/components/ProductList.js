@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
 import Filter from './Filter';
 import StarRatings from 'react-star-ratings';
-import { FaHeart, FaCheck } from 'react-icons/fa'; // Using react-icons for icons
+import { FaHeart, FaCheck } from 'react-icons/fa'; 
 import { UserContext } from './UserContext';
 
 
@@ -86,11 +86,6 @@ function ProductList() {
                             starDimension="15px"
                             starSpacing="1px"
                           />
-                          {/*<div className="mt-3"> 
-                            <Button variant="primary" onClick={() => addToCart(product)}>
-                              Add to Cart
-                              </Button>
-                              </div> */}
                         </Card.Body>
                       </Col>
                     </Row>

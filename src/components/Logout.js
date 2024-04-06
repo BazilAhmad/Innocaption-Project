@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from './UserContext'; // Ensure this path is correct
+import { UserContext } from './UserContext';
 
 const Logout = () => {
   const { setUser } = useContext(UserContext);

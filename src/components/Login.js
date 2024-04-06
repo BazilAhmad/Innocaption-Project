@@ -12,13 +12,15 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    login(username); // Now login handles everything internally
-    navigate('/'); // Navigate to home or desired page after login
+    const viable = login(username); //login handles everything internally
+    if (viable) {
+      navigate('/')
+    }
   };
 
   const handleSignUp = () => {
     // Navigate to the sign-up page
-    navigate('/signup'); // Adjust the route as per your sign-up page's route
+    navigate('/signup');
   };
 
   return (

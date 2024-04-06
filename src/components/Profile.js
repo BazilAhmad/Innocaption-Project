@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Container, Card, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
-import { UserContext } from './UserContext'; // Ensure this path is correct
+import { UserContext } from './UserContext'; 
 import { FaTimes } from 'react-icons/fa'; // Importing X (close) icon from react-icons
 
 
@@ -24,9 +24,9 @@ const Profile = () => {
   return (
     <Container className="mt-5">
       <Card>
-        <Card.Header as="h5">Profile Details</Card.Header>
+        <Card.Header as="h2">Profile Details</Card.Header>
         <Card.Body>
-          <Card.Title>{user.username}</Card.Title>
+          <Card.Title as="h3">{user.username}</Card.Title>
           <h5>Wishlist</h5>
           {wishlist.length > 0 ? (
             <ListGroup>
